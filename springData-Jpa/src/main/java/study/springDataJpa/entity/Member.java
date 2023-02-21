@@ -9,6 +9,10 @@ import javax.persistence.*;
 @Getter
 @Setter
 @ToString(of = {"id", "username", "age"}) // 연관관계 필드는 ToString 하지 않는걸 권장 (여기서는 teem, 무한루프에 빠질수있다)
+@NamedQuery(
+        name= "Member.findByUsername",
+        query= "select m from Member m where m.username = :username"
+)
 public class Member {
 
     @Id @GeneratedValue

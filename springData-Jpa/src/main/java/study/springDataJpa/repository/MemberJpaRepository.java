@@ -57,4 +57,11 @@ public class MemberJpaRepository {
                 .getResultList();
 
     }
+
+    public List<Member> findByUsername(String username) {
+        // 정의 해놨던 (@NamedQuery)를 불러와서 재사용 할수있다.
+        return em.createNamedQuery("Member.findByUsername", Member.class)
+                .setParameter("username", username)
+                .getResultList();
+    }
 }
