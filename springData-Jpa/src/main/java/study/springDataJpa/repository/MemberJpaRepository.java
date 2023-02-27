@@ -79,4 +79,15 @@ public class MemberJpaRepository {
                 .setParameter("age", age)
                 .getSingleResult();
     }
+
+
+    // DB의 값을 전체적으로 바꿔야되는경우 벌크성 쿼리 작성
+    public int bulkAgePlus(int age){
+        // 파라미터로 넘어온 age가 같거나 그 이상인 사람들은 1살이 증가
+        return em.createQuery("update Member m set m.age = m.age + 1 " +
+                        "where m.age >= :age")
+                .setParameter("age", age)
+                .executeUpdate();
+
+    }
 }
