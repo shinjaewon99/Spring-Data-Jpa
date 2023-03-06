@@ -1,4 +1,4 @@
-package study.springDataJpa;
+package study.springDataJpa.controller;
 
 
 import org.springframework.stereotype.Controller;

@@ -22,8 +22,6 @@ public class SpringDataJpaApplication {
 
 	@Bean
 	public AuditorAware<String> auditorAware(){
-
-
 		return () -> Optional.of(UUID.randomUUID().toString());
 
 		// 람다식 사용 X
