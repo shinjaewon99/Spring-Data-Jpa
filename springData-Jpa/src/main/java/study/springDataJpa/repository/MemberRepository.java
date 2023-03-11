@@ -13,7 +13,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {
+public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom, JpaSpecificationExecutor<Member> {
 
     List<Member> findByUsernameAndAgeGreaterThan(String username, int age);
 
@@ -67,11 +67,29 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
     List<Member> findAll();
 
 
-    @QueryHints(value = @QueryHint(name = "org.hibernate.readOnly", value = "true") )
+    @QueryHints(value = @QueryHint(name = "org.hibernate.readOnly", value = "true"))
     Member findReadOnlyByUsername(String username);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     List<Member> findLockByUsername(String username);
+
+
+    // 엔티티 클래스가 아닌 DTO 클래스에서 조회
+    List<UsernameOnlyDto> findByProjectionsUsername(@Param("username") String username);
     
+
+    // 네이티브 쿼리 (쿼리 그대로 로그에 찍힌다), 제약 사항이 많아 사용 X
+    @Query(value = "select * from member where username = ?", nativeQuery = true)
+    Member findByNativeQuery(String username);
+
+
+    @Query(value = "select m.member_id as id, m.usernmae, t.name as teamName" +
+            "from member m left join team t",
+            countQuery = "select count(*) from member",
+            nativeQuery = true)
+    Page<MemberProjection> findByNativeProjection(Pageable pageable);
+
+
+
 
 }
